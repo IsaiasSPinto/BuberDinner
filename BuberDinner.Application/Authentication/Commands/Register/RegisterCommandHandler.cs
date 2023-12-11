@@ -3,8 +3,8 @@ using BuberDinner.Application.Commom.Interfaces.Persistence;
 using ErrorOr;
 using MediatR;
 using BuberDinner.Domain.Common.Errors;
-using BuberDinner.Domain.Entities;
 using BuberDinner.Application.Authentication.Common;
+using BuberDinner.Domain.User;
 
 namespace BuberDinner.Application.Authentication.Commands.Register;
 
@@ -26,13 +26,11 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<A
             return Errors.User.DuplicateEmail;
         }
 
-        var user = new User
-        {
-            Email = command.Email,
-            FirstName = command.FirstName,
-            LastName = command.LastName,
-            Password = command.Password
-        };
+        var user = User.Create(
+            command.FirstName,
+            command.LastName,
+            command.Email,
+            command.Password);
 
         _userRepository.Add(user);
 

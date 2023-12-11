@@ -19,18 +19,27 @@ public static class DependencyInjection
         this IServiceCollection services,
         ConfigurationManager configuration)
     {
-        services.AddAuth(configuration);
+        services
+            .AddAuth(configuration)
+            .AddPersistence();
 
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
+        return services;
+    }
+
+    public static IServiceCollection AddPersistence(
+       this IServiceCollection services)
+    {
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IMenuRepository, MenuRepository>();
 
         return services;
     }
 
     private static IServiceCollection AddAuth(
-        this IServiceCollection services,
-        ConfigurationManager configuration)
+    this IServiceCollection services,
+    ConfigurationManager configuration)
     {
         var jwtSettings = new JwtSettings();
         configuration.Bind(JwtSettings.SectionName, jwtSettings);

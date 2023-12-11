@@ -16,6 +16,12 @@ public class HostId : ValueObject
         return new(Guid.NewGuid());
     }
 
+
+    public static HostId Create(string hostId)
+    {
+        return new(Guid.Parse(hostId));
+    }
+
     public override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;
